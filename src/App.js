@@ -1,25 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import axios from "axios";
 
-function App() {
+export default function App() {
+  const [texti, setText] = useState("");
+
+  let handleChange = (e) => {
+    setText(e.target.value);
+  };
+
+  let postData = async () => {
+    let headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    };
+
+    let url = "http://127.0.0.1:8000/recommend_restaurant/";
+    let data = {
+      restaurant_name: texti,
+    };
+    axios
+      .post(url, data, {
+        headers,
+      })
+      .then(function (response) {
+        console.log(response);
+      });
+  };
+
+  let handleSubmit = () => {
+    postData();
+    setText("");
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input value={texti} onChange={handleChange} type="text" />
+      <button
+        onClick={() => {
+          handleSubmit();
+        }}
+      >
+        {" "}
+        Go!!{" "}
+      </button>
     </div>
   );
 }
-
-export default App;
